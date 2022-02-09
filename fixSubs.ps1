@@ -14,13 +14,14 @@ Param(
     [parameter]
     [string[]] $sourceVideo,
     [parameter]
-    [string[]] $sourceSubtitle,
+    [string[]] $sourceSubtitle
 )
-
+# If a ZIP file is found then extract it into the same directory
 if ($sourceSubtitle -match ".zip")
 {
     $sourceSubtitleLocation = Split-Path -Path "$sourceSubtitle"
     Expand-Archive -Path $sourceSubtitle -DestinationPath $sourceSubtitleLocation
 }  
 
+# Define the actual SRT file as a variable and rename it to match video file
 $subtitle = get-childitem -path $sourceSubtitleLocation -Filter "*.srt"
