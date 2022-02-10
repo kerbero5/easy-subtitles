@@ -16,6 +16,9 @@ Param(
     [parameter]
     [string[]] $sourceSubtitle
 )
+# Set source folder as Windows User Directory Downloads Folder
+$sourceVideoLocation = Split-Path -Path "$sourceVideo"
+
 # If a ZIP file is found then extract it into the same directory
 if ($sourceSubtitle -match ".zip")
 {
@@ -23,5 +26,9 @@ if ($sourceSubtitle -match ".zip")
     Expand-Archive -Path $sourceSubtitle -DestinationPath $sourceSubtitleLocation
 }  
 
-# Define the actual SRT file as a variable and rename it to match video file
+# Define the actual SRT file as a variable, then move it to video directory. Delete the ZIP
 $subtitle = get-childitem -path $sourceSubtitleLocation -Filter "*.srt"
+Remove-Item $sourceSubtitle
+Move-Item -Path $subtitle -Destination $sourceVideoLocation
+
+# Rename SRT to match video file
